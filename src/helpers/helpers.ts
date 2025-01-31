@@ -38,11 +38,34 @@ export function handleFileUpload(event, setData) {
   }
 }
 
+function timeToSeconds(timeStr) {
+  const [hours, minutes, seconds] = timeStr.split(":").map(Number);
+  return hours * 3600 + minutes * 60 + seconds;
+}
+
+
 export function groupDataByCategory(data) {
   return data.reduce((acc, exercise) => {
     const category = exercise["activity type"];
-    if (!acc[category]) acc[category] = [];
-    acc[category].push(exercise);
+    if (!acc[category]) {
+      acc[category] = {
+        exercises: [],
+        totalTime: 0,
+        totalCalories: 0
+      };
+    }
+
+    acc[category].exercises.push(exercise);
+    acc[category].totalTime += timeToSeconds(exercise.time);
+    acc[category].totalCalories += parseInt(exercise.calories);
     return acc;
   }, {});
 }
+
+export function secondsToTime(seconds) {
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const remainingSeconds = seconds % 60;
+  return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
+
