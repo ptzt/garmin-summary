@@ -51,13 +51,15 @@ export function groupDataByCategory(data) {
       acc[category] = {
         exercises: [],
         totalTime: 0,
-        totalCalories: 0
+        totalCalories: 0,
+        totalDistance: 0
       };
     }
 
     acc[category].exercises.push(exercise);
     acc[category].totalTime += timeToSeconds(exercise.time);
     acc[category].totalCalories += parseInt(exercise.calories);
+    acc[category].totalDistance += parseInt(exercise.distance);
     return acc;
   }, {});
 }
